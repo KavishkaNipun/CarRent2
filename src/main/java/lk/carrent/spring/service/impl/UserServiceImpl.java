@@ -11,14 +11,16 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserRepo usersRepo;
+    private UserRepo userRepo;
 
     @Autowired
     private ModelMapper mapper;
@@ -26,25 +28,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUsers(UserDTO dto) {
-        if (usersRepo.existsById(dto.getUserID())) {
+        if (userRepo.existsById(dto.getUserID())) {
             throw new ValidateException("User Already Exist");
         }
-        usersRepo.save(mapper.map(dto, User.class));
+        userRepo.save(mapper.map(dto, User.class));
     }
 
     @Override
     public void deleteUsers(String id) {
-        if (!usersRepo.existsById(id)) {
+        if (!userRepo.existsById(id)) {
             throw new ValidateException("No User for Delete..!");
         }
-        usersRepo.deleteById(id);
+        userRepo.deleteById(id);
 
-        usersRepo.deleteById(id);
+//        usersRepo.deleteById(id);
     }
 
     @Override
     public UserDTO searchUsers(String id) {
-        Optional<User> users = usersRepo.findById(id);
+        Optional<User> users = userRepo.findById(id);
         if (users.isPresent()) {
             return mapper.map(users.get(), UserDTO.class);
         }
@@ -53,14 +55,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ArrayList<UserDTO> getAllUsers() {
-        List<User> users = usersRepo.findAll();
+        List<User> users = userRepo.findAll();
         return mapper.map(users,new TypeToken<ArrayList<VehicleDTO>>(){}.getType());
     }
 
     @Override
     public void updateUsers(UserDTO dto) {
-        if (usersRepo.existsById(dto.getUserID())) {
-            usersRepo.save(mapper.map(dto, User.class));
+        if (userRepo.existsById(dto.getUserID())) {
+            userRepo.save(mapper.map(dto, User.class));
         }
+    }
+
+    @Override
+    public UserDTO searchByUser(String id, String password) {
+        User op = userRepo.searchByUserNameAndPassword(id, password);
+        if (op==null) {
+            System.out.println("Not Found");
+        }else{
+            return mapper.map(op, UserDTO.class);
+        }
+        return null;
     }
 }

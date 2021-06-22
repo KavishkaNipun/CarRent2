@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/carrent/user")
 public class UserController {
+
     @Autowired
     private UserService userService ;
 
@@ -25,12 +27,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity saveUsers(@RequestBody UserDTO userDTO){
-        if (userDTO.getUserID().trim().length() <= 0) {
+    public ResponseEntity saveUsers(@RequestBody UserDTO usersDTO){
+        if (usersDTO.getUserID().trim().length() <= 0) {
             throw new NotFoundException("User id cannot be empty");
         }
-        userService.addUsers(userDTO);
-        return new ResponseEntity(new StandardResponce("201", "Done", userDTO), HttpStatus.CREATED);
+        userService.addUsers(usersDTO);
+        return new ResponseEntity(new StandardResponce("201", "Done", usersDTO), HttpStatus.CREATED);
     }
 
     @PutMapping
@@ -43,7 +45,7 @@ public class UserController {
         return new ResponseEntity(new StandardResponce("200", "Done", usersDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity DeleteUsers(String id){
 
         userService.deleteUsers(id);
@@ -54,5 +56,11 @@ public class UserController {
     public ResponseEntity getAllUsers(@RequestBody DriverDTO driverDTO){
         ArrayList<UserDTO> allUsers= userService.getAllUsers();
         return new ResponseEntity(new StandardResponce("200", "Done", allUsers), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "searchuser/{name}/{password}")
+    public ResponseEntity searchByUser(@PathVariable String name, @PathVariable String password) {
+        UserDTO dto = userService.searchByUser(name, password);
+        return new ResponseEntity(new StandardResponce("200", "Done", dto), HttpStatus.OK);
     }
 }

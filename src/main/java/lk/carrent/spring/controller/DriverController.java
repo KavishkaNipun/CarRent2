@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/carrent/dirver")
 public class DriverController {
@@ -24,16 +25,16 @@ public class DriverController {
     }
 
     @PostMapping
-    public ResponseEntity saveDamage(@RequestBody DriverDTO driverDTO){
+    public ResponseEntity saveDriver(@RequestBody DriverDTO driverDTO){
         if (driverDTO.getDriverId().trim().length() <= 0) {
-            throw new NotFoundException("Damage id cannot be empty");
+            throw new NotFoundException("Driver id cannot be empty");
         }
         driverService.addDriver(driverDTO);
         return new ResponseEntity(new StandardResponce("201", "Done", driverDTO), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity updateCustomer(@RequestBody DriverDTO driverDTO){
+    public ResponseEntity updateDriver(@RequestBody DriverDTO driverDTO){
 
         if (driverDTO.getDriverId().trim().length() <= 0) {
             throw new NotFoundException("No id provided to update");
@@ -44,14 +45,13 @@ public class DriverController {
 
     @DeleteMapping
     public ResponseEntity DeleteDriver(String id){
-
         driverService.deleteDriver(id);
         return new ResponseEntity(new StandardResponce("200", "Done", null), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getAllDriver(@RequestBody DriverDTO driverDTO){
-        ArrayList<DriverDTO> allDamage = driverService.getAllDriver();
-        return new ResponseEntity(new StandardResponce("200", "Done", allDamage), HttpStatus.OK);
+        ArrayList<DriverDTO> allDriver = driverService.getAllDriver();
+        return new ResponseEntity(new StandardResponce("200", "Done", allDriver), HttpStatus.OK);
     }
 }
