@@ -8,17 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/carrent/admin")
+@RequestMapping("/easycarrent/admin")
 public class AdminController {
+
     @Autowired
     private AdminService service;
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity searchAdmin(@PathVariable String id) {
+    @GetMapping(path = "search/{id}")
+    public ResponseEntity searchAdmin(String id) {
         AdminDTO dto = service.searchAdmin(id);
         return new ResponseEntity(new StandardResponce("200", "Done", dto), HttpStatus.OK);
     }
@@ -41,8 +43,8 @@ public class AdminController {
         return new ResponseEntity(new StandardResponce("200", "Done", dto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteAdmin(@PathVariable String id) {
+    @DeleteMapping
+    public ResponseEntity deleteAdmin(String id) {
         service.deleteAdmin(id);
         return new ResponseEntity(new StandardResponce("200", "Done", null), HttpStatus.OK);
     }
