@@ -13,5 +13,7 @@ public interface AdminService {
 
     ArrayList<AdminDTO> getAllAdmins();
 
+    ArrayList<AdminDTO> SearchAdminsByName(String name);
+
     void updateAdmin(AdminDTO dto);
 }

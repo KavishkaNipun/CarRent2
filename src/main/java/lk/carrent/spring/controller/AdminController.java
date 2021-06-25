@@ -1,6 +1,7 @@
 package lk.carrent.spring.controller;
 
 import lk.carrent.spring.dto.AdminDTO;
+import lk.carrent.spring.dto.CustomerDTO;
 import lk.carrent.spring.exception.NotFoundException;
 import lk.carrent.spring.service.AdminService;
 import lk.carrent.spring.util.StandardResponce;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/easycarrent/admin")
+@RequestMapping("/carrent/admin")
 public class AdminController {
 
     @Autowired
@@ -27,9 +28,7 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity saveAdmin(@RequestBody AdminDTO dto) {
-        if (dto.getAdminID().trim().length() <= 0) {
-            throw new NotFoundException("Admin ID cannot be empty");
-        }
+        System.out.println("saveAdmin(controller) : "+dto);
         service.addAdmin(dto);
         return new ResponseEntity(new StandardResponce("201", "Done", dto), HttpStatus.CREATED);
     }
@@ -53,5 +52,10 @@ public class AdminController {
     public ResponseEntity getAllAdmin() {
         ArrayList<AdminDTO> all = service.getAllAdmins();
         return new ResponseEntity(new StandardResponce("200", "Done", all), HttpStatus.OK);
+    }
+    @GetMapping(path = "searchByName/{name}")
+    public ResponseEntity searchByName(@PathVariable String name) {
+        ArrayList<AdminDTO> allAdmin = service.SearchAdminsByName(name);
+        return new ResponseEntity(new StandardResponce("200", "Done", allAdmin), HttpStatus.OK);
     }
 }

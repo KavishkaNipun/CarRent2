@@ -1,7 +1,9 @@
 package lk.carrent.spring.service.impl;
 
 import lk.carrent.spring.dto.AdminDTO;
+import lk.carrent.spring.dto.CustomerDTO;
 import lk.carrent.spring.entity.Admin;
+import lk.carrent.spring.entity.Customer;
 import lk.carrent.spring.exception.ValidateException;
 import lk.carrent.spring.repo.AdminRepo;
 import lk.carrent.spring.service.AdminService;
@@ -27,9 +29,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void addAdmin(AdminDTO dto) {
-        if (adminRepo.existsById(dto.getAdminID())) {
+        if (adminRepo.existsAdminByNic(dto.getNic())) {
             throw new ValidateException("Admin Already Exist");
         }
+
+        System.out.println("addAdmin(service) : "+dto);
+
         adminRepo.save(mapper.map(dto, Admin.class));
     }
 
@@ -55,6 +60,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ArrayList<AdminDTO> getAllAdmins() {
         List<Admin> all = adminRepo.findAll();
+        return mapper.map(all, new TypeToken<ArrayList<AdminDTO>>() {
+        }.getType());
+    }
+
+    @Override
+    public ArrayList<AdminDTO> SearchAdminsByName(String name) {
+        List<Admin> all = adminRepo.searchAdminsByName(name);
         return mapper.map(all, new TypeToken<ArrayList<AdminDTO>>() {
         }.getType());
     }
