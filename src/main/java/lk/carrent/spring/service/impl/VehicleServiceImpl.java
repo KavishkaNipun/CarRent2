@@ -23,18 +23,25 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private ModelMapper mapper;
 
+//    @Override
+//    public void addVehicle(VehicleDTO dto) {
+//        if (vehicleRepo.existsById(dto.getVehicleID())) {
+//            throw new ValidateException("Vehicle Already Exist");
+//        }
+//        vehicleRepo.save(mapper.map(dto, Vehicle.class));
     @Override
     public void addVehicle(VehicleDTO dto) {
-        if (vehicleRepo.existsById(dto.getVehicleID())) {
-            throw new ValidateException("Customer Already Exist");
+        if (vehicleRepo.existsVehicleByVehicleID(dto.getVehicleID())) {
+            throw new ValidateException("Vehicle Already Exist");
         }
+        System.out.println("addVehicle(service) : "+dto);
         vehicleRepo.save(mapper.map(dto, Vehicle.class));
     }
 
     @Override
     public void deleteVehicle(String id) {
         if (!vehicleRepo.existsById(id)) {
-            throw new ValidateException("No Customer for Delete..!");
+            throw new ValidateException("No Vehicle for Delete..!");
         }
         vehicleRepo.deleteById(id);
 
@@ -58,9 +65,16 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void updateVehicle(VehicleDTO dto) {
-        if (vehicleRepo.existsById(dto.getVehicleID())) {
-            vehicleRepo.save(mapper.map(dto, Vehicle.class));
-        }
+    public ArrayList<VehicleDTO> SearchVehicleByBrand(String name) {
+        List<Vehicle> all = vehicleRepo.searchVehicleByBrand(name);
+        return mapper.map(all, new TypeToken<ArrayList<VehicleDTO>>() {
+        }.getType());
     }
-}
+
+            @Override
+            public void updateVehicle (VehicleDTO dto){
+                if (vehicleRepo.existsById(dto.getVehicleID())) {
+                    vehicleRepo.save(mapper.map(dto, Vehicle.class));
+                }
+            }
+        }

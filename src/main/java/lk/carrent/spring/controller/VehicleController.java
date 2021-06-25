@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/carrent/vehicle")
 public class VehicleController {
@@ -52,5 +53,11 @@ public class VehicleController {
     public ResponseEntity getAllVehicle() {
         ArrayList<VehicleDTO> all = service.getAllVehicle();
         return new ResponseEntity(new StandardResponce("200", "Done", all), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "searchByBrand/{name}")
+    public ResponseEntity SearchVehicleByBrand(@PathVariable String name) {
+        ArrayList<VehicleDTO> allVehicles = service.SearchVehicleByBrand(name);
+        return new ResponseEntity(new StandardResponce("200", "Done", allVehicles), HttpStatus.OK);
     }
 }

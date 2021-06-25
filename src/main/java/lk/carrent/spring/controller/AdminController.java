@@ -1,7 +1,6 @@
 package lk.carrent.spring.controller;
 
 import lk.carrent.spring.dto.AdminDTO;
-import lk.carrent.spring.dto.CustomerDTO;
 import lk.carrent.spring.exception.NotFoundException;
 import lk.carrent.spring.service.AdminService;
 import lk.carrent.spring.util.StandardResponce;
