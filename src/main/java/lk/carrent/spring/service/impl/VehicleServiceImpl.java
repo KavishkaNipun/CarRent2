@@ -23,12 +23,6 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private ModelMapper mapper;
 
-//    @Override
-//    public void addVehicle(VehicleDTO dto) {
-//        if (vehicleRepo.existsById(dto.getVehicleID())) {
-//            throw new ValidateException("Vehicle Already Exist");
-//        }
-//        vehicleRepo.save(mapper.map(dto, Vehicle.class));
     @Override
     public void addVehicle(VehicleDTO dto) {
         if (vehicleRepo.existsVehicleByVehicleID(dto.getVehicleID())) {
